@@ -85,8 +85,8 @@ module.exports = function(grunt) {
 	function CConfig(pathConfigs) {
 		this.externs = null;
 		this.word = null;
-		this.cell = null;
-		this.slide = null;
+		// this.cell = null;
+		// this.slide = null;
 
 		this.append(pathConfigs);
 	}
@@ -124,11 +124,12 @@ module.exports = function(grunt) {
 		
 		appendOption.call(this, 'externs');
 		appendOption.call(this, 'word');
-		appendOption.call(this, 'cell');
-		appendOption.call(this, 'slide');
+		// appendOption.call(this, 'cell');
+		// appendOption.call(this, 'slide');
 	};
 	CConfig.prototype.valid = function () {
-		return this.externs && this.word && this.cell && this.slide;
+		// return this.externs && this.word && this.cell && this.slide;
+		return this.externs && this.word;
 	};
 
 	function getExterns(config) {
@@ -192,10 +193,11 @@ module.exports = function(grunt) {
 		}
 
 		const configWord = configs.word['sdk'];
-		const configCell = configs.cell['sdk'];
-		const configSlide = configs.slide['sdk'];
+		// const configCell = configs.cell['sdk'];
+		// const configSlide = configs.slide['sdk'];
 
-		const deploy = '../deploy/sdkjs/';
+		const deploy = grunt.option('deployPath') || '../deploy/sdkjs/';
+		// const deploy = '../../document-editor-angular-workspace/src/assets/sdkjs/';
 
 		// crete empty.js for polyfills
 		const emptyJs = 'empty.js';
@@ -212,8 +214,8 @@ module.exports = function(grunt) {
 		const sdkMinTmp = 'sdk-min-tmp.js';
 		const sdkAllTmp = 'sdk-all-tmp.js';
 		const sdkWordTmp = 'sdk-word-tmp.js';
-		const sdkCellTmp = 'sdk-cell-tmp.js';
-		const sdkSlideTmp = 'sdk-slide-tmp.js';
+		// const sdkCellTmp = 'sdk-cell-tmp.js';
+		// const sdkSlideTmp = 'sdk-slide-tmp.js';
 
 		const compilerArgs = getExterns(configs.externs);
 		if (grunt.option('map')) {
@@ -240,34 +242,34 @@ module.exports = function(grunt) {
 					src: [sdkMinTmp, sdkAllTmp],
 					dest: sdkWordTmp
 				},
-				cellsdkmin: {
-					options: optionsSdkMin,
-					src: getFilesMin(configCell),
-					dest: sdkMinTmp
-				},
-				cellsdkall: {
-					options: optionsSdkAll,
-					src: getFilesAll(configCell),
-					dest: sdkAllTmp
-				},
-				cellall: {
-					src: [sdkMinTmp, sdkAllTmp],
-					dest: sdkCellTmp
-				},
-				slidesdkmin: {
-					options: optionsSdkMin,
-					src: getFilesMin(configSlide),
-					dest: sdkMinTmp
-				},
-				slidesdkall: {
-					options: optionsSdkAll,
-					src: getFilesAll(configSlide),
-					dest: sdkAllTmp
-				},
-				slideall: {
-					src: [sdkMinTmp, sdkAllTmp],
-					dest: sdkSlideTmp
-				}
+				// cellsdkmin: {
+				// 	options: optionsSdkMin,
+				// 	src: getFilesMin(configCell),
+				// 	dest: sdkMinTmp
+				// },
+				// cellsdkall: {
+				// 	options: optionsSdkAll,
+				// 	src: getFilesAll(configCell),
+				// 	dest: sdkAllTmp
+				// },
+				// cellall: {
+				// 	src: [sdkMinTmp, sdkAllTmp],
+				// 	dest: sdkCellTmp
+				// },
+				// slidesdkmin: {
+				// 	options: optionsSdkMin,
+				// 	src: getFilesMin(configSlide),
+				// 	dest: sdkMinTmp
+				// },
+				// slidesdkall: {
+				// 	options: optionsSdkAll,
+				// 	src: getFilesAll(configSlide),
+				// 	dest: sdkAllTmp
+				// },
+				// slideall: {
+				// 	src: [sdkMinTmp, sdkAllTmp],
+				// 	dest: sdkSlideTmp
+				// }
 			},
 			'closure-compiler': {
 				js: {
@@ -277,8 +279,9 @@ module.exports = function(grunt) {
 							'--warning_level=QUIET', '--compilation_level=' + level,
 							'--module=polyfill:1:', '--js=' + emptyJs,
 							'--module=word:1:polyfill', '--js=' + sdkWordTmp,
-							'--module=cell:1:polyfill', '--js=' + sdkCellTmp,
-							'--module=slide:1:polyfill', '--js=' + sdkSlideTmp)
+							// '--module=cell:1:polyfill', '--js=' + sdkCellTmp,
+							// '--module=slide:1:polyfill', '--js=' + sdkSlideTmp
+							)
 					}
 				}
 			},
@@ -292,8 +295,8 @@ module.exports = function(grunt) {
 						sdkMinTmp,
 						sdkAllTmp,
 						sdkWordTmp,
-						sdkCellTmp,
-						sdkSlideTmp,
+						// sdkCellTmp,
+						// sdkSlideTmp,
 						deploy
 					]
 				}
@@ -303,14 +306,15 @@ module.exports = function(grunt) {
 	grunt.registerTask('license', 'Add license', function () {
 		const appCopyright = "Copyright (C) Ascensio System SIA 2012-" + grunt.template.today('yyyy') +". All rights reserved";
 		const publisherUrl = "https://www.onlyoffice.com/";
-		const deploy = '../deploy/sdkjs/';
+		const deploy = grunt.option('deployPath') || '../deploy/sdkjs/';
+		// const deploy = '../../document-editor-angular-workspace/src/assets/sdkjs/';
 		const word = path.join(deploy, 'word');
-		const cell = path.join(deploy, 'cell');
-		const slide = path.join(deploy, 'slide');
+		// const cell = path.join(deploy, 'cell');
+		// const slide = path.join(deploy, 'slide');
 		const polyfill = 'polyfill.js';
 		const wordJs = 'word.js';
-		const cellJs = 'cell.js';
-		const slideJs = 'slide.js';
+		// const cellJs = 'cell.js';
+		// const slideJs = 'slide.js';
 		const license = 'license.header';
 		let splitLine;
 		if ('ADVANCED' === level) {
@@ -336,10 +340,10 @@ module.exports = function(grunt) {
 		const concatSdkFiles = concatSdk['files'];
 		concatSdkFiles[getSdkPath(true, word)] = [license, polyfill, getSdkPath(true, word)];
 		concatSdkFiles[getSdkPath(false, word)] = [license, getSdkPath(false, word)];
-		concatSdkFiles[getSdkPath(true, cell)] = [license, polyfill, getSdkPath(true, cell)];
-		concatSdkFiles[getSdkPath(false, cell)] = [license, getSdkPath(false, cell)];
-		concatSdkFiles[getSdkPath(true, slide)] = [license, polyfill, getSdkPath(true, slide)];
-		concatSdkFiles[getSdkPath(false, slide)] = [license, getSdkPath(false, slide)];
+		// concatSdkFiles[getSdkPath(true, cell)] = [license, polyfill, getSdkPath(true, cell)];
+		// concatSdkFiles[getSdkPath(false, cell)] = [license, getSdkPath(false, cell)];
+		// concatSdkFiles[getSdkPath(true, slide)] = [license, polyfill, getSdkPath(true, slide)];
+		// concatSdkFiles[getSdkPath(false, slide)] = [license, getSdkPath(false, slide)];
 
 		grunt.initConfig({
 			splitfile: {
@@ -348,16 +352,16 @@ module.exports = function(grunt) {
 					dest: word,
 					src: wordJs
 				},
-				cell: {
-					options: splitOptions,
-					dest: cell,
-					src: cellJs
-				},
-				slide: {
-					options: splitOptions,
-					dest: slide,
-					src: slideJs
-				}
+				// cell: {
+				// 	options: splitOptions,
+				// 	dest: cell,
+				// 	src: cellJs
+				// },
+				// slide: {
+				// 	options: splitOptions,
+				// 	dest: slide,
+				// 	src: slideJs
+				// }
 			},
 			concat: {
 				sdk: concatSdk
@@ -379,8 +383,8 @@ module.exports = function(grunt) {
 					},
 					files: [
 						{expand: true, flatten: true, src: [getSdkPath(true, word), getSdkPath(false, word)], dest: word + '/'},
-						{expand: true, flatten: true, src: [getSdkPath(true, cell), getSdkPath(false, cell)], dest: cell + '/'},
-						{expand: true, flatten: true, src: [getSdkPath(true, slide), getSdkPath(false, slide)], dest: slide + '/'}
+						// {expand: true, flatten: true, src: [getSdkPath(true, cell), getSdkPath(false, cell)], dest: cell + '/'},
+						// {expand: true, flatten: true, src: [getSdkPath(true, slide), getSdkPath(false, slide)], dest: slide + '/'}
 					]
 				}
 			},
@@ -392,6 +396,7 @@ module.exports = function(grunt) {
 							expand: true,
 							cwd: '../common/',
 							src: [
+								'AllFonts.js',
 								'Charts/ChartStyles.js',
 								'Images/*',
 								'Images/placeholders/*',
@@ -407,24 +412,24 @@ module.exports = function(grunt) {
 							],
 							dest: path.join(deploy, 'common')
 						},
-						{
-							expand: true,
-							cwd: '../cell/css',
-							src: '*.css',
-							dest: path.join(cell, 'css')
-						},
-						{
-							expand: true,
-							cwd: '../slide/themes',
-							src: '**/**',
-							dest: path.join(slide, 'themes')
-						},
-						{
-							expand: true,
-							cwd: '../pdf/',
-							src: 'src/engine/*',
-							dest: path.join(deploy, 'pdf')
-						}
+						// {
+						// 	expand: true,
+						// 	cwd: '../cell/css',
+						// 	src: '*.css',
+						// 	dest: path.join(cell, 'css')
+						// },
+						// {
+						// 	expand: true,
+						// 	cwd: '../slide/themes',
+						// 	src: '**/**',
+						// 	dest: path.join(slide, 'themes')
+						// },
+						// {
+						// 	expand: true,
+						// 	cwd: '../pdf/',
+						// 	src: 'src/engine/*',
+						// 	dest: path.join(deploy, 'pdf')
+						// }
 					]
 				}
 			},
@@ -436,8 +441,8 @@ module.exports = function(grunt) {
 					src: [
 						polyfill,
 						wordJs,
-						cellJs,
-						slideJs
+						// cellJs,
+						// slideJs
 					]
 				}
 			}
@@ -462,8 +467,8 @@ module.exports = function(grunt) {
 		}
 
 		writeScripts(configs.word['sdk'], 'word');
-		writeScripts(configs.cell['sdk'], 'cell');
-		writeScripts(configs.slide['sdk'], 'slide');
+		// writeScripts(configs.cell['sdk'], 'cell');
+		// writeScripts(configs.slide['sdk'], 'slide');
 	});
 	grunt.registerTask('default', ['build-sdk', 'concat', 'closure-compiler', 'clean', 'license', 'splitfile', 'concat', 'replace', 'copy', 'clean']);
 	grunt.registerTask('develop', ['clean-develop', 'clean', 'build-develop']);

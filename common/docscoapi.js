@@ -1059,7 +1059,8 @@
 
     if (data !== null && typeof data === "object") {
       if (this._state > 0) {
-        this.sockjs.send(JSON.stringify(data));
+        // this.sockjs.send(JSON.stringify(data));
+        this._onServerMessage(JSON.stringify(data));
       } else {
         this._msgBuffer.push(JSON.stringify(data));
       }
@@ -1069,7 +1070,8 @@
   DocsCoApi.prototype._sendRaw = function(data) {
     if (data !== null && typeof data === "string") {
       if (this._state > 0) {
-        this.sockjs.send(data);
+        // this.sockjs.send(data);
+        this._onServerMessage(data);
       } else {
         this._msgBuffer.push(data);
       }
@@ -1686,7 +1688,8 @@
     this.coEditingMode = docInfo.asc_getCoEditingMode();
 
     this.setDocId(docid);
-    this._initSocksJs();
+    // this._initSocksJs();
+    this.setServerMessage(docInfo);
   };
   DocsCoApi.prototype.getDocId = function() {
     return this._docid;
@@ -1745,6 +1748,69 @@
       'supportAuthChangesAck': true
     });
   };
+
+	DocsCoApi.prototype.setServerMessage = function (docInfo) {
+    var licenseData = {
+      "type": "license",
+      "license": {
+        "type": 3,
+        "light": false,
+        "mode": 0,
+        "rights": 1,
+        "buildVersion": "7.2.1",
+        "buildNumber": 34,
+        "protectionSupport": true,
+        "liveViewerSupport": false,
+        "branding": false,
+        "customization": true,
+        "advancedApi": false,
+        "plugins": false
+      }
+    }
+      
+    var authResult = {
+      "type": "auth",
+      "result": 1,
+      "buildVersion": "7.2.1",
+      "buildNumber": 34,
+      "licenseType": 3,
+    }
+
+    var doc = {
+      "type": "documentOpen",
+      "data": {
+        "type": "open",
+        "status": "ok",
+        "data": {
+          "Editor.bin": docInfo.Url
+        },
+        "openedAt": 0
+      }
+    }
+      
+    var getMessages = { "type": "getMessages" }
+    var message = {"type":"message"}
+
+		var t = this;
+    
+    t._onServerOpen();
+
+    setTimeout(() => {
+      t._onServerMessage(JSON.stringify(licenseData))
+    }, 100);
+
+    // setTimeout(() => {
+    //     t._onServerMessage(JSON.stringify(authData))
+    // }, 100);
+
+    setTimeout(() => {
+      t._onServerMessage(JSON.stringify(authResult))
+    }, 100);
+
+    setTimeout(() => {
+      t._onServerMessage(JSON.stringify(doc))
+    }, 100);
+	};
 
 	DocsCoApi.prototype._initSocksJs = function () {
 		var t = this;
@@ -1888,7 +1954,7 @@
 	};
 	DocsCoApi.prototype._reconnect = function () {
 		delete this.sockjs;
-		this._initSocksJs();
+		// this._initSocksJs();
 	};
 	DocsCoApi.prototype._tryReconnect = function () {
 		var t = this;

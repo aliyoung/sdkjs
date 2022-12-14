@@ -2,8 +2,8 @@
 build/node_modules
 build/$weak$.js
 common/AllFonts.js
-common/Images/fonts_thumbnail*
-common/Images/themes_thumbnail*
+# common/Images/fonts_thumbnail*
+# common/Images/themes_thumbnail*
 slide/themes/theme*
 slide/themes/themes.js
 *~
@@ -20,3 +20,4 @@ node_modules
 package-lock.json
 */node_modules
 */package-lock.json
+*/pnpm-lock.yaml

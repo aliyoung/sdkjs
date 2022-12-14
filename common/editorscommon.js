@@ -802,7 +802,8 @@
 		rdata["userconnectionid"] = editor.CoAuthoringApi.getUserConnectionId();
 		asc_ajax({
 			type:        'POST',
-			url:         sDownloadServiceLocalUrl + '/' + rdata["id"] + '?cmd=' + encodeURIComponent(JSON.stringify(rdata)),
+			// url:         sDownloadServiceLocalUrl + '/' + rdata["id"] + '?cmd=' + encodeURIComponent(JSON.stringify(rdata)),
+			url:         rdata.url,
 			data:        dataContainer.part || dataContainer.data,
 			contentType: "application/octet-stream",
 			error:       function (httpRequest, statusText, status)
@@ -816,7 +817,13 @@
 						 {
 							 if (fCallback)
 							 {
-								 fCallback(JSON.parse(httpRequest.responseText), true);
+								var result
+								try {
+									result = JSON.parse(httpRequest.responseText);
+								} catch (error) {
+									result = {status: 'ok', data: httpRequest.responseText};
+								}
+								 fCallback(result, true);
 							 }
 						 }
 		});
