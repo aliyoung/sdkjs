@@ -2802,6 +2802,13 @@ background-repeat: no-repeat;\
 		};
 		sendCommand(this, null, rData);
 	};
+	asc_docs_api.prototype.get_DocumentData = function()
+	{
+		var oLogicDocument = this.WordControl.m_oLogicDocument;
+		var oBinaryFileWriter = new AscCommonWord.BinaryFileWriter(oLogicDocument, undefined, undefined, false);
+		var data = oBinaryFileWriter.Write(true);
+		return data;
+	};
 	asc_docs_api.prototype.asc_DownloadAs     = function(options)
 	{
 		if (this.isLongAction()) {
@@ -12998,6 +13005,7 @@ background-repeat: no-repeat;\
 	asc_docs_api.prototype['Cut']                                       = asc_docs_api.prototype.Cut;
 	asc_docs_api.prototype['Paste']                                     = asc_docs_api.prototype.Paste;
 	asc_docs_api.prototype['Share']                                     = asc_docs_api.prototype.Share;
+	asc_docs_api.prototype['get_DocumentData']                          = asc_docs_api.prototype.get_DocumentData;
 	asc_docs_api.prototype['asc_Save']                                  = asc_docs_api.prototype.asc_Save;
 	asc_docs_api.prototype['forceSave']                                 = asc_docs_api.prototype.forceSave;
 	asc_docs_api.prototype['asc_setIsForceSaveOnUserSave']              = asc_docs_api.prototype.asc_setIsForceSaveOnUserSave;
