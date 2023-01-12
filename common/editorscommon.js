@@ -438,7 +438,7 @@
 						 },
 		getImageUrl:     function (strPath)
 						 {
-							 return this.getUrl(this.mediaPrefix + strPath) || strPath;
+							 return this.getUrl(this.mediaPrefix + strPath) || window['IMAGE_DOWNLOAD_URL'] + window['IMAGE_UUID'] + '/' + strPath;
 						 },
 		getImageLocal:   function (url)
 						 {
@@ -802,8 +802,7 @@
 		rdata["userconnectionid"] = editor.CoAuthoringApi.getUserConnectionId();
 		asc_ajax({
 			type:        'POST',
-			// url:         sDownloadServiceLocalUrl + '/' + rdata["id"] + '?cmd=' + encodeURIComponent(JSON.stringify(rdata)),
-			url:         rdata.url,
+			url:         sDownloadServiceLocalUrl + '/' + rdata["id"] + '?cmd=' + encodeURIComponent(JSON.stringify(rdata)),
 			data:        dataContainer.part || dataContainer.data,
 			contentType: "application/octet-stream",
 			error:       function (httpRequest, statusText, status)
@@ -839,6 +838,18 @@
 			contentType: "application/octet-stream",
 			error:       fError,
 			success:     fsuccess
+		});
+	}
+
+	function saveDocumentToRemote(url, data, fError, fSuccess)
+	{
+		asc_ajax({
+			type:        'POST',
+			url:         url,
+			data:        data,
+			contentType: "application/octet-stream",
+			error:       fError,
+			success:     fSuccess
 		});
 	}
 
@@ -2104,6 +2115,7 @@
 		if (files.length > 0)
 		{
 			var url = sUploadServiceLocalUrl + '/' + documentId;
+			url = window['IMAGE_UPLOAD_URL'] || url;
 
 			var aFiles = [];
 			for(var i = files.length - 1;  i > - 1; --i){
@@ -2116,29 +2128,43 @@
                 if (4 == this.readyState){
                     if ((this.status == 200 || this.status == 1223)){
                         var urls = JSON.parse(this.responseText);
-                        g_oDocumentUrls.addUrls(urls);
+						var urlsNew = {};
+
                         for (var i in urls)
                         {
                             if (urls.hasOwnProperty(i))
                             {
-                                aResultUrls.push(urls[i]);
+								var key = 'media/' + urls[i];	// Fixed format
+								urlsNew[key] = (window['IMAGE_DOWNLOAD_URL'] || '') + urls[i];
+								window['IMAGE_UPLOAD_LIST'].push(urls[i]);
+                                aResultUrls.push(urlsNew[key]);
                                 break;
                             }
                         }
+
+						// var res = urls.url;
+						// var key = 'media/' + res;	// Fixed format
+						// urlsNew[key] = (window['IMAGE_DOWNLOAD_URL'] || '') + res;
+						// window['IMAGE_UPLOAD_LIST'].push(res);
+						// aResultUrls.push(urlsNew[key]);
+
+                        g_oDocumentUrls.addUrls(urlsNew);
+
                         if(aFiles.length === 0){
                             callback(Asc.c_oAscError.ID.No, aResultUrls);
                         }
                         else{
                             file = aFiles.pop();
+
+							var formData = new FormData();
+							formData.append('file', file);
+
                             var xhr = new XMLHttpRequest();
-
-                            url = sUploadServiceLocalUrl + '/' + documentId;
-
                             xhr.open('POST', url, true);
-                            xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-                            xhr.setRequestHeader('Authorization', 'Bearer ' + jwt);
+                            // xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+                            // xhr.setRequestHeader('Authorization', 'Bearer ' + jwt);
                             xhr.onreadystatechange = fOnReadyChnageState;
-                            xhr.send(file);
+                            xhr.send(formData);
                         }
                     }
                     else if(this.status === 403){
@@ -2149,12 +2175,15 @@
                 }
             };
 
+			var formData = new FormData();
+			formData.append('file', file);
+
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', url, true);
-			xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-			xhr.setRequestHeader('Authorization', 'Bearer ' + jwt);
+			// xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+			// xhr.setRequestHeader('Authorization', 'Bearer ' + jwt);
 			xhr.onreadystatechange = fOnReadyChnageState;
-			xhr.send(file);
+			xhr.send(formData);
 		}
 		else
 		{
@@ -12872,6 +12901,7 @@
 	window["AscCommon"].openFileCommand = openFileCommand;
 	window["AscCommon"].sendCommand = sendCommand;
 	window["AscCommon"].sendSaveFile = sendSaveFile;
+	window["AscCommon"].saveDocumentToRemote = saveDocumentToRemote;
 	window["AscCommon"].mapAscServerErrorToAscError = mapAscServerErrorToAscError;
 	window["AscCommon"].joinUrls = joinUrls;
 	window["AscCommon"].getFullImageSrc2 = getFullImageSrc2;

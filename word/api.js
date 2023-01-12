@@ -2809,6 +2809,10 @@ background-repeat: no-repeat;\
 		var data = oBinaryFileWriter.Write(true);
 		return data;
 	};
+	asc_docs_api.prototype.save_DocumentData = function(url, data, fError, fSuccess)
+	{
+		AscCommon.saveDocumentToRemote(url, data, fError, fSuccess)
+	};
 	asc_docs_api.prototype.asc_DownloadAs     = function(options)
 	{
 		if (this.isLongAction()) {
@@ -7557,8 +7561,10 @@ background-repeat: no-repeat;\
 			_loader_object = this.WordControl.m_oDrawingDocument.m_oDocumentRenderer;
 
 		var _count = 0;
-		for (var i in _loader_object.ImageMap)
+		for (var i in _loader_object.ImageMap) {
+			_loader_object.ImageMap[i] = window['IMAGE_DOWNLOAD_URL'] + window['IMAGE_UUID'] + '/' + _loader_object.ImageMap[i];
 			++_count;
+		}
 
 		if (!this.isOnlyReaderMode)
 		{
@@ -13006,6 +13012,7 @@ background-repeat: no-repeat;\
 	asc_docs_api.prototype['Paste']                                     = asc_docs_api.prototype.Paste;
 	asc_docs_api.prototype['Share']                                     = asc_docs_api.prototype.Share;
 	asc_docs_api.prototype['get_DocumentData']                          = asc_docs_api.prototype.get_DocumentData;
+	asc_docs_api.prototype['save_DocumentData']                         = asc_docs_api.prototype.save_DocumentData;
 	asc_docs_api.prototype['asc_Save']                                  = asc_docs_api.prototype.asc_Save;
 	asc_docs_api.prototype['forceSave']                                 = asc_docs_api.prototype.forceSave;
 	asc_docs_api.prototype['asc_setIsForceSaveOnUserSave']              = asc_docs_api.prototype.asc_setIsForceSaveOnUserSave;
