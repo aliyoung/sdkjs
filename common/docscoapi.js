@@ -530,7 +530,7 @@
   };
   CDocsCoApi.prototype.callback_OnSpellCheckInit = function(e) {
     if (this.onSpellCheckInit) {
-      this.onSpellCheckInit(e);
+      // this.onSpellCheckInit(e);
     }
   };
 

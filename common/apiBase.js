@@ -213,7 +213,7 @@
 		this.Shortcuts = new AscCommon.CShortcuts();
 		this.initDefaultShortcuts();
 
-		this.isUseNativeViewer = true;
+		this.isUseNativeViewer = false;
 
 		this.openedAt = undefined;
 		this.maxChangesSize = 0;

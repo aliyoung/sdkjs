@@ -9724,33 +9724,34 @@ CDocument.prototype.OnKeyDown = function(e)
 			let oSelectedInfo = this.GetSelectedElementsInfo();
 			let inlineSdt;
 
-			var Hyperlink = this.IsCursorInHyperlink(false);
-			if (Hyperlink)
-			{
-				var sBookmarkName = Hyperlink.GetAnchor();
-				var sValue        = Hyperlink.GetValue();
+			// var Hyperlink = this.IsCursorInHyperlink(false);
+			// if (Hyperlink)
+			// {
+			// 	var sBookmarkName = Hyperlink.GetAnchor();
+			// 	var sValue        = Hyperlink.GetValue();
 
-				if (Hyperlink.IsTopOfDocument())
-				{
-					this.MoveCursorToStartOfDocument();
-				}
-				else if (sValue)
-				{
-					this.Api.sync_HyperlinkClickCallback(sBookmarkName ? sValue + "#" + sBookmarkName : sValue);
-					Hyperlink.SetVisited(true);
+			// 	if (Hyperlink.IsTopOfDocument())
+			// 	{
+			// 		this.MoveCursorToStartOfDocument();
+			// 	}
+			// 	else if (sValue)
+			// 	{
+			// 		this.Api.sync_HyperlinkClickCallback(sBookmarkName ? sValue + "#" + sBookmarkName : sValue);
+			// 		Hyperlink.SetVisited(true);
 
-					// TODO: Пока сделаем так, потом надо будет переделать
-					this.DrawingDocument.ClearCachePages();
-					this.DrawingDocument.FirePaint();
-				}
-				else if (sBookmarkName)
-				{
-					var oBookmark = this.BookmarksManager.GetBookmarkByName(sBookmarkName);
-					if (oBookmark)
-						oBookmark[0].GoToBookmark();
-				}
-			}
-			else if ((inlineSdt = oSelectedInfo.GetInlineLevelSdt()) && inlineSdt.IsForm() && inlineSdt.IsTextForm() && inlineSdt.IsMultiLineForm())
+			// 		// TODO: Пока сделаем так, потом надо будет переделать
+			// 		this.DrawingDocument.ClearCachePages();
+			// 		this.DrawingDocument.FirePaint();
+			// 	}
+			// 	else if (sBookmarkName)
+			// 	{
+			// 		var oBookmark = this.BookmarksManager.GetBookmarkByName(sBookmarkName);
+			// 		if (oBookmark)
+			// 			oBookmark[0].GoToBookmark();
+			// 	}
+			// }
+			// else 
+			if ((inlineSdt = oSelectedInfo.GetInlineLevelSdt()) && inlineSdt.IsForm() && inlineSdt.IsTextForm() && inlineSdt.IsMultiLineForm())
 			{
 				if (!this.IsSelectionLocked(AscCommon.changestype_Paragraph_Content, null, true, this.IsFormFieldEditing()))
 				{

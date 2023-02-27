@@ -2811,7 +2811,7 @@ background-repeat: no-repeat;\
 	};
 	asc_docs_api.prototype.save_DocumentData = function(url, data, fError, fSuccess)
 	{
-		AscCommon.saveDocumentToRemote(url, data, fError, fSuccess)
+		AscCommon.saveDocumentData(url, data, fError, fSuccess)
 	};
 	asc_docs_api.prototype.asc_DownloadAs     = function(options)
 	{
@@ -7562,7 +7562,7 @@ background-repeat: no-repeat;\
 
 		var _count = 0;
 		for (var i in _loader_object.ImageMap) {
-			_loader_object.ImageMap[i] = window['IMAGE_DOWNLOAD_URL'] + window['IMAGE_UUID'] + '/' + _loader_object.ImageMap[i];
+			_loader_object.ImageMap[i] = window['IMAGE_DOWNLOAD_URL'] + window['IMAGE_PATH'] + '/' + _loader_object.ImageMap[i];
 			++_count;
 		}
 
