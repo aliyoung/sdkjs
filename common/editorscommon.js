@@ -438,7 +438,7 @@
 						 },
 		getImageUrl:     function (strPath)
 						 {
-							 return this.getUrl(this.mediaPrefix + strPath) || window['IMAGE_DOWNLOAD_URL'] + window['IMAGE_PATH'] + '/' + strPath;
+							 return this.getUrl(this.mediaPrefix + strPath) || window.parent['IMAGE_DOWNLOAD_URL'] + window.parent['IMAGE_PATH'] + '/' + strPath;
 						 },
 		getImageLocal:   function (url)
 						 {
@@ -2172,8 +2172,8 @@
 						}
 
 						key = 'media/' + url;	// Fixed format
-						urlsNew[key] = (window['IMAGE_DOWNLOAD_URL'] || '') + url;
-						window['IMAGE_UPLOAD_LIST'].push(url);
+						urlsNew[key] = (window.parent['IMAGE_DOWNLOAD_URL'] || '') + url;
+						window.parent['IMAGE_UPLOAD_LIST'].push(url);
 						aResultUrls.push(urlsNew[key]);
 
                         g_oDocumentUrls.addUrls(urlsNew);
@@ -2200,8 +2200,10 @@
 				var key;
 				key = 'media/' + url;	// Fixed format
 				urlsNew[key] = url;
-				window['IMAGE_UPLOAD_LIST'].push(url);
-				aResultUrls.push(urlsNew[key]);
+				// if (window.parent['IMAGE_UPLOAD_LIST'].indexOf(subUrl) == -1) {
+				// 	window.parent['IMAGE_UPLOAD_LIST'].push(subUrl);
+				// }
+				aResultUrls.push(url);
 
 				g_oDocumentUrls.addUrls(urlsNew);
 
@@ -2237,11 +2239,11 @@
 		if (file instanceof File) {
 			xhrData = new FormData();
 			xhrData.append('file', file);
-			url = window['FILE_UPLOAD_URL'];
+			url = window.parent['FILE_UPLOAD_URL'];
 			xhr.open("POST", url, true);
 		} else if (typeof file == 'string') {
 			xhrData = JSON.stringify({images:[file]});
-			url = window['IMAGE_UPLOAD_URL'];
+			url = window.parent['IMAGE_UPLOAD_URL'];
 			xhr.open("POST", url, true);
 			xhr.setRequestHeader('Content-Type', 'application/json');
 		} else {

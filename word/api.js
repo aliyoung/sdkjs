@@ -7562,7 +7562,7 @@ background-repeat: no-repeat;\
 
 		var _count = 0;
 		for (var i in _loader_object.ImageMap) {
-			_loader_object.ImageMap[i] = window['IMAGE_DOWNLOAD_URL'] + window['IMAGE_PATH'] + '/' + _loader_object.ImageMap[i];
+			_loader_object.ImageMap[i] = window.parent['IMAGE_DOWNLOAD_URL'] + window.parent['IMAGE_PATH'] + '/' + _loader_object.ImageMap[i];
 			++_count;
 		}
 
