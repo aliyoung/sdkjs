@@ -3708,6 +3708,13 @@
 						}
 					}
 				}
+
+				var token = window.parent.localStorage.getItem('access_token');
+				httpRequest.setRequestHeader("authorization", 'Bearer ' + token);
+
+				var lang = window.parent.localStorage.getItem('AITEACHER_LANG');
+				lang && httpRequest.setRequestHeader("accept-language", lang);
+
 				if (responseType)
 					httpRequest.responseType = responseType;
 				httpRequest.send(data);
